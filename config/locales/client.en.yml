@@ -3,7 +3,7 @@ en:
     admin:
       site_settings:
         categories:
-          TODO_plugin_name: "Plugin Name"
+          discourse_version_tag_priority: "Discourse Version Tag Priority"
   js:
-    discourse_plugin_name:
+    discourse_version_tag_priority:
       placeholder: placeholder

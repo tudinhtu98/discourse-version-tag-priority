@@ -1,4 +1,7 @@
-TODO_plugin_name:
-  plugin_name_enabled:
+discourse_version_tag_priority:
+  discourse_version_tag_priority_enabled:
     default: false
     client: true
+  discourse_version_tag_priority_symbol:
+    default: "v"
+    client: false

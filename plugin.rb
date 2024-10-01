@@ -10,6 +10,8 @@
 
 enabled_site_setting :discourse_version_tag_priority_enabled
 
+register_asset 'stylesheets/common.scss'
+
 module ::DiscourseVersionTagPriorityModule
   PLUGIN_NAME = "discourse-version-tag-priority"
 end

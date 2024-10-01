@@ -4,4 +4,4 @@ discourse_version_tag_priority:
     client: true
   discourse_version_tag_priority_symbol:
     default: "v"
-    client: false
+    client: true

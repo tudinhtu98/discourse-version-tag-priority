@@ -20,19 +20,19 @@ class TagsController
           filter_params[:term] = clean_name
           filter_params[:order_search_results] = true
         else
-          # Order by popularity with specific condition when q is empty
-          version_tag_prefix = SiteSetting.discourse_version_tag_priority_symbol
-        #   filter_params[:order_popularity] = true
-          filter_params[:term] = "#{version_tag_prefix}"
-          filter_params[:order_search_results] = true
+          filter_params[:order_popularity] = true
         end
     
         tags_with_counts, filter_result_context =
           DiscourseTagging.filter_allowed_tags(guardian, **filter_params, with_context: true)
         
+        # Remove the tags that start with 'v_'
+        if SiteSetting.discourse_version_tag_priority_enabled
+          version_tag_prefix = SiteSetting.discourse_version_tag_priority_symbol
+          tags_with_counts = tags_with_counts.reject { |tag, count| tag.name.start_with?(version_tag_prefix) }
+        end
+        
         tags = self.class.tag_counts_json(tags_with_counts, guardian)
-        puts "tags_with_counts: #{tags_with_counts}"
-    
         json_response = { results: tags }
     
         if clean_name && !tags.find { |h| h[:id].downcase == clean_name.downcase } &&
@@ -81,4 +81,54 @@ class TagsController
     
         render json: json_response
     end
+
+
+    # Search only tag start with v_
+    def search_version
+      filter_params = {
+        for_input: params[:filterForInput],
+        selected_tags: params[:selected_tags],
+        exclude_synonyms: params[:excludeSynonyms],
+        exclude_has_synonyms: params[:excludeHasSynonyms],
+      }
+    
+      if limit = fetch_limit_from_params(default: nil, max: SiteSetting.max_tag_search_results)
+        filter_params[:limit] = limit
+      end
+    
+      filter_params[:category] = Category.find_by_id(params[:categoryId]) if params[:categoryId]
+    
+      if !params[:q].blank?
+        clean_name = DiscourseTagging.clean_tag(params[:q])
+        filter_params[:term] = clean_name
+        filter_params[:order_search_results] = true
+      else
+        filter_params[:order_popularity] = true
+      end
+    
+      # Filter tags that only start with "v_"
+      version_tag_prefix = SiteSetting.discourse_version_tag_priority_symbol
+      filter_params[:term] = version_tag_prefix unless filter_params[:term]
+    
+      tags_with_counts, filter_result_context =
+        DiscourseTagging.filter_allowed_tags(guardian, **filter_params, with_context: true)
+    
+      # Keep only the tags that start with "v_"
+      tags_with_counts = tags_with_counts.select { |tag, count| tag.name.start_with?(version_tag_prefix) }
+    
+      tags = self.class.tag_counts_json(tags_with_counts, guardian)
+    
+      json_response = { results: tags }
+    
+      if clean_name && !tags.find { |h| h[:id].downcase == clean_name.downcase } &&
+           tag = Tag.where_name(clean_name).first
+        json_response[:forbidden] = params[:q]
+      end
+    
+      if required_tag_group = filter_result_context[:required_tag_group]
+        json_response[:required_tag_group] = required_tag_group
+      end
+    
+      render json: json_response
+    end    
 end

@@ -30,7 +30,7 @@ export default class AdminPluginsVersionController extends Controller {
       data.user_id = this.newAuthorId;
     }
     try {
-      const res = await ajax(`/t/${props.topicId}.json`, {
+      const res = await ajax(`/version_tags/change_topic/${props.topicId}`, {
         type: "PUT",
         data,
       });

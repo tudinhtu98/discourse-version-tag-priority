@@ -1,0 +1,88 @@
+<div class="buttons">
+  <span><strong>From Category Id:</strong></span>
+  <Input
+    @value={{this.fromCategoryId}}
+    @onChange={{fn (mut this.fromCategoryId)}}
+  />
+</div>
+<div class="buttons">
+  <span><strong>To Category Id:</strong></span>
+  <Input
+    @value={{this.toCategoryId}}
+    @onChange={{fn (mut this.toCategoryId)}}
+  />
+</div>
+<div class="buttons">
+  <span><strong>New Author Id (optional):</strong></span>
+  <Input
+    @value={{this.newAuthorId}}
+    @onChange={{fn (mut this.newAuthorId)}}
+  />
+</div>
+<div class="buttons">
+  <DButton
+    @label="version_tag_settings.move_all_topic"
+    @action={{action "moveAllTopic"}}
+    @icon="copy"
+    @id="MoveAllTopic"
+  />
+</div>
+<h1></h1>
+<div class="buttons">
+  <DButton
+    @label="version_tag_settings.show_topics"
+    @action={{action "showTopics"}}
+    @icon="eye"
+    @id="show-topics"
+  />
+</div>
+
+{{#if this.tentacleVisible}}
+  <ConditionalLoadingSpinner @condition={{this.isLoadingListTopic}}>
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Id</th>
+          <th>Title</th>
+          <th>Set Datetime</th>
+          {{!-- <th></th>
+          <th>{{i18n "username"}}</th>
+          <th>{{i18n "last_seen"}}</th>
+          <th>{{i18n "admin.user.topics_entered"}}</th>
+          <th>{{i18n "admin.user.posts_read_count"}}</th>
+          <th>{{i18n "admin.user.time_read"}}</th>
+          <th>{{i18n "created"}}</th> --}}
+        </tr>
+      </thead>
+
+      <tbody>
+        {{#each this.listTopics as |topic|}}
+          <tr>
+            <td>{{topic.id}}</td>
+            <td><a href={{concat "/t/" topic.id}} target="_blank">{{topic.title}}</a></td>
+            <td>
+              <DatePicker
+                @defaultDate={{topic.created_at}}
+                @value={{topic.created_at}}
+                @onSelect={{action "onChangeDate" (hash topicId=topic.id)}}
+              />
+            </td>
+            {{!-- <td>
+              <Input
+                @type="checkbox"
+                disabled={{not (get user this.penaltyField)}}
+                {{on "click" (fn this.selectUserId user.id)}}
+              />
+            </td> --}}
+            {{!-- <td>{{avatar user imageSize="small"}} {{user.username}}</td>
+            <td>{{format-duration user.last_seen_age}}</td>
+            <td>{{number user.topics_entered}}</td>
+            <td>{{number user.posts_read_count}}</td>
+            <td>{{format-duration user.time_read}}</td>
+            <td>{{format-duration user.created_at_age}}</td> --}}
+          </tr>
+        {{/each}}
+      </tbody>
+    </table>
+  </ConditionalLoadingSpinner>
+{{/if}}

@@ -18,6 +18,12 @@ end
 
 require_relative "lib/discourse_version_tag_priority_module/engine"
 
+add_admin_route 'version_tag_settings.title', 'version-tag'
+
+Discourse::Application.routes.append do
+  get '/admin/plugins/version-tag' => 'admin/plugins#index', constraints: StaffConstraint.new
+end
+
 after_initialize do
   # Code which should run after Rails has finished booting
   [

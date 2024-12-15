@@ -7,6 +7,10 @@ en:
   js:
     discourse_version_tag_priority:
       placeholder: placeholder
+    version_tag_settings:
+      title: Discourse version tags
+      show_topics: Show topics
+      move_all_topic: Move all topic
     version_tagging:
       tags: "RMP Version Tags"
       all_tags: "All RMP Version Tags"

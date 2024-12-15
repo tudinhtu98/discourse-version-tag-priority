@@ -12,8 +12,20 @@ export default class AdminPluginsVersionController extends Controller {
   @tracked listTopics = [];
 
   @action
-  moveAllTopic() {
-    console.log("move all");
+  async moveAllTopic() {
+    try {
+      const res = await ajax(`/version_tags/move_all_topic`, {
+        type: "POST",
+        data: {
+          from_category_id: this.fromCategoryId,
+          to_category_id: this.toCategoryId,
+        },
+      });
+      alert(`Move all topic successfully`);
+      this.loadListTopicFromCategoryId(this.fromCategoryId);
+    } catch (error) {
+      alert(`Move all topic fail`);
+    }
   }
 
   @action
@@ -34,10 +46,8 @@ export default class AdminPluginsVersionController extends Controller {
         type: "PUT",
         data,
       });
-      console.log("res", res);
       alert(`Change date success for topic ${props.topicId}`);
     } catch (error) {
-      console.log("error", error);
       alert(`Change date fail for topic ${props.topicId}`);
     }
   }

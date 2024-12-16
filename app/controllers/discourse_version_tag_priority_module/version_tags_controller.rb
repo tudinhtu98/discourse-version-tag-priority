@@ -2,7 +2,7 @@
 
 module DiscourseVersionTagPriorityModule
   class VersionTagsController < ApplicationController
-    before_action :ensure_staff, only: [:change_topic]
+    before_action :ensure_staff, only: [:change_topic, :move_all_topic]
 
     def change_topic
       topic_id = params[:topic_id]

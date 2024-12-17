@@ -35,6 +35,11 @@ export default class AdminPluginsVersionController extends Controller {
   }
 
   @action
+  changeOldActivity() {
+    this.callChangeOldActivity(this.fromCategoryId);
+  }
+
+  @action
   async onChangeDate(props, date) {
     const convertDate = this.convertDateWithTime(date);
     const data = { created_at: convertDate, updated_at: convertDate };
@@ -59,6 +64,22 @@ export default class AdminPluginsVersionController extends Controller {
       this.listTopics = res.topic_list.topics;
     } finally {
       this.isLoadingListTopic = false;
+    }
+  }
+
+  async callChangeOldActivity(categoryId) {
+    try {
+      const res = await ajax(`/version_tags/change_old_activity`, {
+        type: "POST",
+        data: {
+          category_id: categoryId,
+        },
+      });
+      alert(
+        `Change old activity of all topic from category ${categoryId} successfully`
+      );
+    } catch (error) {
+      alert(`Change old activity of all topic fail`);
     }
   }
 

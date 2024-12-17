@@ -11,6 +11,7 @@ en:
       title: Discourse version tags
       show_topics: Show topics
       move_all_topic: Move all topic
+      change_old_activity: Change old activity
     version_tagging:
       tags: "RMP Version Tags"
       all_tags: "All RMP Version Tags"

@@ -2,7 +2,7 @@
 
 module DiscourseVersionTagPriorityModule
   class VersionTagsController < ApplicationController
-    before_action :ensure_staff, only: [:change_topic, :move_all_topic]
+    before_action :ensure_staff, only: [:change_topic, :move_all_topic, :change_old_activity]
 
     def change_topic
       topic_id = params[:topic_id]
@@ -57,6 +57,24 @@ module DiscourseVersionTagPriorityModule
       else
         render json: { error: 'Failed to move topics' }, status: :unprocessable_entity
       end
+    end
+
+    def change_old_activity
+      category_id = params[:category_id]
+  
+      return render json: { error: 'category_id is required' }, status: :bad_request if category_id.blank?
+  
+      category = Category.find_by(id: category_id)
+      return render json: { error: 'Category not found' }, status: :not_found unless category
+  
+      topics = Topic.where(category_id: category_id)
+                    .where("updated_at < ?", Date.new(2024, 2, 21))
+  
+      topics.each do |topic|
+        topic.update(bumped_at: topic.updated_at)
+      end
+  
+      render json: { message: "#{topics.size} topics updated successfully in category #{category_id}" }, status: :ok
     end
   end
 end

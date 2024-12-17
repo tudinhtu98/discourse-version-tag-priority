@@ -30,6 +30,15 @@
 <h1></h1>
 <div class="buttons">
   <DButton
+    @label="version_tag_settings.change_old_activity"
+    @action={{action "changeOldActivity"}}
+    @icon="copy"
+    @id="changeOldActivity"
+  />
+</div>
+<h1></h1>
+<div class="buttons">
+  <DButton
     @label="version_tag_settings.show_topics"
     @action={{action "showTopics"}}
     @icon="eye"

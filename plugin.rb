@@ -3,7 +3,7 @@
 # name: discourse-version-tag-priority
 # about: prioritize version tags
 # meta_topic_id: TODO
-# version: 0.0.1
+# version: 1.0.0
 # authors: tudinhtu98
 # url: https://github.com/tudinhtu98/discourse-version-tag-priority
 # required_version: 2.7.0

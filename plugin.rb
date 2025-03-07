@@ -28,5 +28,6 @@ after_initialize do
   # Code which should run after Rails has finished booting
   [
     '../app/controllers/tags_controller.rb',
+    '../lib/discourse_version_tagging.rb',
   ].each { |path| load File.expand_path(path, __FILE__) }
 end

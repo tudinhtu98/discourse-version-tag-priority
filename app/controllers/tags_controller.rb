@@ -103,7 +103,7 @@ class TagsController
         filter_params[:term] = clean_name
         filter_params[:order_search_results] = true
       else
-        filter_params[:order_popularity] = true
+        filter_params[:order_created_at] = true
       end
     
       # Filter tags that only start with "v_"
@@ -111,7 +111,7 @@ class TagsController
       filter_params[:term] = version_tag_prefix unless filter_params[:term]
     
       tags_with_counts, filter_result_context =
-        DiscourseTagging.filter_allowed_tags(guardian, **filter_params, with_context: true)
+        DiscourseVersionTagging.filter_allowed_tags(guardian, **filter_params, with_context: true)
     
       # Keep only the tags that start with "v_"
       tags_with_counts = tags_with_counts.select { |tag, count| tag.name.start_with?(version_tag_prefix) }

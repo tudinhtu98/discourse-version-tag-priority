@@ -25,7 +25,6 @@ export default {
     withPluginApi("1.3.0", (api) => {
       api.modifyClass("model:composer", {
         pluginId: PLUGIN_ID,
-        is_private: false,
         version_tags: [],
 
         combinedTags: computed("tags", "version_tags", function () {

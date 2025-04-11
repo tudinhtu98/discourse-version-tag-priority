@@ -1,0 +1,7 @@
+<div class="tags-input full-width-version-tags">
+  <MiniTagChooserVersion
+    @value={{this.model.version_tags}}
+    @onChange={{fn (mut this.model.version_tags)}}
+    @options={{hash categoryId=this.model.categoryId}}
+  />
+</div>

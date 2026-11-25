@@ -1,9 +1,13 @@
+import { tracked } from "@glimmer/tracking";
 import Controller from "@ember/controller";
 import { action } from "@ember/object";
-import { tracked } from "@glimmer/tracking";
+import { service } from "@ember/service";
 import { ajax } from "discourse/lib/ajax";
+import { popupAjaxError } from "discourse/lib/ajax-error";
 
-export default class AdminPluginsVersionController extends Controller {
+export default class AdminPluginsVersionTagController extends Controller {
+  @service dialog;
+
   @tracked tentacleVisible = false;
   @tracked fromCategoryId = 4;
   @tracked toCategoryId = 0;
@@ -14,17 +18,17 @@ export default class AdminPluginsVersionController extends Controller {
   @action
   async moveAllTopic() {
     try {
-      const res = await ajax(`/version_tags/move_all_topic`, {
+      await ajax(`/version_tags/move_all_topic`, {
         type: "POST",
         data: {
           from_category_id: this.fromCategoryId,
           to_category_id: this.toCategoryId,
         },
       });
-      alert(`Move all topic successfully`);
+      this.dialog.alert("Move all topic successfully");
       this.loadListTopicFromCategoryId(this.fromCategoryId);
     } catch (error) {
-      alert(`Move all topic fail`);
+      popupAjaxError(error);
     }
   }
 
@@ -47,13 +51,13 @@ export default class AdminPluginsVersionController extends Controller {
       data.user_id = this.newAuthorId;
     }
     try {
-      const res = await ajax(`/version_tags/change_topic/${props.topicId}`, {
+      await ajax(`/version_tags/change_topic/${props.topicId}`, {
         type: "PUT",
         data,
       });
-      alert(`Change date success for topic ${props.topicId}`);
+      this.dialog.alert(`Change date success for topic ${props.topicId}`);
     } catch (error) {
-      alert(`Change date fail for topic ${props.topicId}`);
+      popupAjaxError(error);
     }
   }
 
@@ -69,17 +73,17 @@ export default class AdminPluginsVersionController extends Controller {
 
   async callChangeOldActivity(categoryId) {
     try {
-      const res = await ajax(`/version_tags/change_old_activity`, {
+      await ajax(`/version_tags/change_old_activity`, {
         type: "POST",
         data: {
           category_id: categoryId,
         },
       });
-      alert(
+      this.dialog.alert(
         `Change old activity of all topic from category ${categoryId} successfully`
       );
     } catch (error) {
-      alert(`Change old activity of all topic fail`);
+      popupAjaxError(error);
     }
   }
 
